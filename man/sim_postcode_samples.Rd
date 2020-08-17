@@ -35,6 +35,9 @@ vignette in the \code{vtreat} package.
 }
 \examples{
 df_levels <- sim_postcode_levels(nlevels = 500, seed = 42)
-df_postcode <- sim_postcode_samples(df_levels, n = 10000, threshold = 3000, prob = c(0.2, 0.1), seed = 43)
+df_postcode <- sim_postcode_samples(
+  df_levels,
+  n = 10000, threshold = 3000, prob = c(0.2, 0.1), seed = 43
+)
 head(df_postcode)
 }
