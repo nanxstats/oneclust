@@ -33,11 +33,11 @@ $$
 
 when each $a_i$ is assigned into $k$ clusters. $\bar{a_i}$ is the weighted mean
 of the cluster that $a_i$ belongs to. Fisher proved that the optimal partitions
-have to be _contiguous_ when the data can be sorted. Contiguous means for
-$i < j < k$, if $a_i$ and $a_k$ are assigned to the same cluster,
-then $a_j$ must also be assigned to the same cluster --- otherwise the
-partition would be suboptimal. This fact leads to a substantially
-reduced number of possible partitions and dynamic programming solutions.
+have to be _contiguous_. Contiguous means for $i < j < k$, if $a_i$ and $a_k$
+are assigned to the same cluster, then $a_j$ must also be assigned to the
+same cluster --- otherwise the partition would be suboptimal.
+This fact leads to a substantially reduced number of possible partitions
+and dynamic programming solutions.
 
 Intuitively, maximum homogeneity clustering can be used to smooth the data
 and reveal its structures. It has some potential applications in data
@@ -233,9 +233,24 @@ abline(h = 0)
 legend("topleft", legend = paste("Cluster", unique(cl2)), col = cud(unique(cl2)), pch = 1)
 ```
 
+## Clustering while preserving data order (k = 5)
+
+We sorted the data before clustering in all previous examples.
+Since the data has a strong spatial correlation, we may need to
+preserve the order of the data points when clustering them.
+This was called the "restricted problem" in @fisher1958grouping.
+To solve such problems, use `sort = FALSE`:
+
+```{r}
+cl3 <- oneclust(beta1, k = 5, sort = FALSE)$cluster
+plot(beta1, col = cud(cl3))
+abline(h = 0)
+legend("topleft", legend = paste("Cluster", unique(cl3)), col = cud(unique(cl3)), pch = 1)
+```
+
 # Time series peak calling
 
-For time series data, the algorithm might be useful for calling peaks.
+For sequential data, the algorithm might be useful for peak calling and segmentation.
 
 ## Simulated time series data
 
@@ -277,6 +292,27 @@ If we increase $k$, there will be fewer intervals included in the peak cluster
 cl <- oneclust(psignal, k = 4)
 plot(psignal, type = "h", col = cud(cl$cluster + 2))
 legend("topright", legend = paste("Cluster", unique(cl$cluster)), col = cud(unique(cl$cluster + 2)), lty = 1)
+```
+
+## Clustering (k = 4)
+
+If we increase $k$, there will be fewer intervals included in the peak cluster
+(Cluster 4), with narrower peak intervals:
+
+```{r}
+cl <- oneclust(psignal, k = 4)
+plot(psignal, type = "h", col = cud(cl$cluster + 2))
+legend("topright", legend = paste("Cluster", unique(cl$cluster)), col = cud(unique(cl$cluster + 2)), lty = 1)
+```
+
+## Clustering while preserving data order (k = 6)
+
+To find a segmentation of the data, we should respect the order of the data:
+
+```{r}
+cl <- oneclust(psignal, k = 6, sort = FALSE)
+plot(psignal, type = "h", col = cud(cl$cluster))
+legend("topright", legend = paste("Cluster", unique(cl$cluster)), col = cud(unique(cl$cluster)), lty = 1, cex = 0.8)
 ```
 
 One may also use the parameter `w` in `oneclust()` to use the weighted
