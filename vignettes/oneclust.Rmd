@@ -1,0 +1,285 @@
+---
+title: "Maximum Homogeneity Clustering for One-Dimensional Data"
+author: "Nan Xiao <<https://nanx.me>>"
+date: "`r Sys.Date()`"
+bibliography: oneclust.bib
+output:
+  rmarkdown::html_document:
+    toc: true
+    toc_float: false
+    number_sections: true
+    highlight: "textmate"
+    css: "custom.css"
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Maximum Homogeneity Clustering for One-Dimensional Data}
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(fig.asp = 10/16, eval = TRUE)
+```
+
+# Introduction
+
+The `oneclust` package implements the maximum homogeneity clustering
+(partitioning) method for univariate data described in @fisher1958grouping
+via dynamic programming. Given a one-dimensional numerical vector
+$(a_1, a_2, \ldots, a_n)$, a weight vector $(w_1, w_2, \ldots, w_n)$,
+and a positive integer $k < n$, the algorithm seeks to minimize
+
+$$
+D = \sum_{i = 1}^{n} w_i (a_i - \bar{a_i})^2
+$$
+
+when each $a_i$ is assigned into $k$ clusters. $\bar{a_i}$ is the weighted mean
+of the cluster that $a_i$ belongs to. Fisher proved that the optimal partitions
+have to be _contiguous_ when the data can be sorted. Contiguous means for
+$i < j < k$, if $a_i$ and $a_k$ are assigned to the same cluster,
+then $a_j$ must also be assigned to the same cluster --- otherwise the
+partition would be suboptimal. This fact leads to a substantially
+reduced number of possible partitions and dynamic programming solutions.
+
+Intuitively, maximum homogeneity clustering can be used to smooth the data
+and reveal its structures. It has some potential applications in data
+pre-processing and post-processing in statistical machine learning.
+
+# Feature engineering for high-cardinality categorical features
+
+Categorical features with high cardinality or rare levels pose a common
+challenge when building certain types of supervised learning models.
+For example, classification trees might only be able to handle
+a limited number of levels in categorical predictors, because a binary node
+split on a categorical feature with $l$ levels means finding one from $2^{l-1}$
+possible combinations thus computationally intractable.
+
+To tackle this problem, @breiman1984classification discussed splitting a
+categorical feature into two subsets when the response is binary, and
+generalized Fisher's result to arbitrary convex node impurity functions.
+Lightgbm [@ke2017lightgbm]
+[employs this method](https://lightgbm.readthedocs.io/en/latest/Features.html#optimal-split-for-categorical-features)
+to find the optimal split by sorting the histogram based on the training
+objective. As such, besides one-hot encoding and hashing, recoding
+high-cardinality categorical features with histogram sorting and
+maximum homogeneity partitioning could be a viable feature engineering
+strategy in practice. The application is also not limited to tree models.
+
+## Simulated postal code data
+
+In this section, we simulate a high-cardinality variable with a binary response.
+The key assumption here is: the probabilities of having which response correlate
+to the size of the level.
+After the data is generated, we use maximum homogeneity clustering on the
+(sorted) histogram of the categorical variable. Our goal is to verify if
+the clustering results can uncover this level size structure and potentially
+help the classification modeling later. This example is derived from
+the "rare levels" vignette in the `vtreat` package [@zumel2016vtreat].
+
+```{r, message=FALSE}
+library("oneclust")
+```
+
+Generate a training set and an independent test set:
+
+```{r}
+df_levels <- sim_postcode_levels(nlevels = 500, seed = 42)
+train <- sim_postcode_samples(df_levels, n = 100000, threshold = 3000, prob = c(0.2, 0.1), seed = 43)
+test <- sim_postcode_samples(df_levels, n = 100000, threshold = 3000, prob = c(0.2, 0.1), seed = 44)
+```
+
+The categorical variable has 500 (unique) levels of postal codes. The training
+and test set each has 100,000 samples. The level size follows a log normal
+distribution $LN(\log(4000), 1)$. For postal code levels with fewer than
+3,000 samples, they are defined as "rare levels" and has a probability of 0.2
+to get response label 1. Otherwise, the level has a probability of 0.1 of
+getting response label 1. The rest of the samples will get a response label 0.
+
+```{r}
+head(df_levels)
+head(train)
+head(test)
+```
+
+## Recode the training set
+
+For the training set, we cluster the postal codes into 32 clusters by
+the size of each level (histogram):
+
+```{r}
+k <- 32
+level_hist <- table(train$postcode)
+level_new <- oneclust(level_hist, k)$cluster
+feature_tr <- level_new[match(train$postcode, names(level_hist))] %>%
+  as.character() %>%
+  ordered(levels = as.character(1:k))
+```
+
+The postal codes belong to the first five clusters have a higher probability
+(approximately 0.2) of getting label 1. The other clusters have a lower
+probability (around 0.1) of getting label 1:
+
+```{r}
+par(las = 1)
+plot(feature_tr, train$label, lty = 0, xlab = "Cluster", ylab = "Label")
+abline(h = 0.2, col = cud(1))
+abline(h = 0.1, col = cud(2))
+```
+
+We can also verify that the number of the samples in the first five clusters
+is close to the actual number of samples in the "rare levels":
+
+```{r}
+sum(train$is_rare)
+sum(table(feature_tr)[1:5])
+```
+
+When the specified number of clusters $k$ is smaller, the results might not
+be as good though.
+
+## Recode the test set
+
+In practice, we should encode the postal codes in the test set with the same
+cluster labels as we used in the training set, so that the classification models
+can be correctly applied to the test set.
+
+```{r}
+feature_te <- level_new[match(test$postcode, names(level_hist))] %>%
+  as.character() %>%
+  ordered(levels = as.character(1:k))
+```
+
+Check if the recoded variable has the similar label pattern:
+
+```{r}
+par(las = 1)
+plot(feature_te, test$label, lty = 0, xlab = "Cluster", ylab = "Label")
+abline(h = 0.2, col = cud(1))
+abline(h = 0.1, col = cud(2))
+```
+
+```{r}
+sum(test$is_rare)
+sum(table(feature_te)[1:5])
+```
+
+# Grouping coefficients in regression models
+
+Besides sparsity and other properties, the _homogeneity_ of the estimated
+coefficients in linear regressions is an important property ---
+meaning certain groups of variables should be encouraged to share
+the same coefficients [@ke2015homogeneity]. The source of homogeneity
+could be attributed to the systematic similarities between variables,
+for example, financial assets that belong to the same sector, or
+sets of adjacent variables with strong spatial correlation [@lin2017ordered].
+
+## Simulated regression data
+
+We use an fused lasso regression model on simulated data to
+illustrate the potential application in post-processing the coefficients.
+The example is derived from the vignette in the
+`genlasso` package [@tibshirani2011solution].
+
+```{r}
+set.seed(42)
+n <- 100
+i <- 1:n
+y <- (i > 20 & i < 30) + 5 * (i > 50 & i < 70) + rnorm(n, sd = 0.1)
+```
+
+## Raw estimates
+
+```{r}
+out <- genlasso::fusedlasso1d(y)
+```
+
+```{r}
+beta1 <- coef(out, lambda = 1.5)$beta
+plot(beta1)
+abline(h = 0)
+```
+
+## Soft-thresholding
+
+We can use soft-thresholding to transform the raw coefficient estimates into
+zero and non-zero values:
+
+```{r}
+beta2 <- genlasso::softthresh(out, lambda = 1.5, gamma = 1)
+grp <- as.integer(beta2 != 0) + 1L
+plot(beta2, col = cud(grp))
+abline(h = 0)
+legend("topleft", legend = c("Zero", "Non-zero"), col = cud(unique(grp)), pch = 1)
+```
+
+## Clustering (k = 2)
+
+We can also use the maximum homogeneity clustering method to group
+the coefficients into two clusters:
+
+```{r}
+cl1 <- oneclust(beta1, k = 2)$cluster
+plot(beta1, col = cud(cl1))
+abline(h = 0)
+legend("topleft", legend = paste("Cluster", unique(cl1)), col = cud(unique(cl1)), pch = 1)
+```
+
+## Clustering (k = 3)
+
+If needed, we can increase $k$ to get more groups of coefficients:
+
+```{r}
+cl2 <- oneclust(beta1, k = 3)$cluster
+plot(beta1, col = cud(cl2))
+abline(h = 0)
+legend("topleft", legend = paste("Cluster", unique(cl2)), col = cud(unique(cl2)), pch = 1)
+```
+
+# Time series peak calling
+
+For time series data, the algorithm might be useful for calling peaks.
+
+## Simulated time series data
+
+We use an example from `pracma::findpeaks()`:
+
+```{r}
+x <- seq(0, 1, len = 1024)
+pos <- c(0.1, 0.13, 0.15, 0.23, 0.25, 0.40, 0.44, 0.65, 0.76, 0.78, 0.81)
+hgt <- c(4, 5, 3, 4, 5, 4.2, 2.1, 4.3, 3.1, 5.1, 4.2)
+wdt <- c(0.005, 0.005, 0.006, 0.01, 0.01, 0.03, 0.01, 0.01, 0.005, 0.008, 0.005)
+
+psignal <- numeric(length(x))
+for (i in seq(along = pos)) {
+  psignal <- psignal + hgt[i] / (1 + abs((x - pos[i]) / wdt[i]))^4
+}
+
+plot(psignal, type = "l")
+```
+
+## Clustering (k = 2)
+
+Group the signal into two clusters:
+
+```{r}
+cl <- oneclust(psignal, k = 2)
+plot(psignal, type = "h", col = cud(cl$cluster))
+legend("topright", legend = paste("Cluster", unique(cl$cluster)), col = cud(unique(cl$cluster)), lty = 1)
+```
+
+Cluster 2 covers the peak locations --- the method did not specify a single
+data point as the peak, instead, it finds intervals.
+
+## Clustering (k = 4)
+
+If we increase $k$, there will be fewer intervals included in the peak cluster
+(Cluster 4), with narrower peak intervals:
+
+```{r}
+cl <- oneclust(psignal, k = 4)
+plot(psignal, type = "h", col = cud(cl$cluster + 2))
+legend("topright", legend = paste("Cluster", unique(cl$cluster)), col = cud(unique(cl$cluster + 2)), lty = 1)
+```
+
+One may also use the parameter `w` in `oneclust()` to use the weighted
+version of the algorithm and amplify the signal.
+
+# References

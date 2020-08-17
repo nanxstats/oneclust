@@ -1,0 +1,28 @@
+Package: oneclust
+Type: Package
+Title: Maximum Homogeneity Clustering for Univariate Data
+Version: 0.1.0
+Authors@R: c(
+    person("Nan", "Xiao", email = "me@nanx.me", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-0250-5673")))
+Maintainer: Nan Xiao <me@nanx.me>
+Description: Maximum homogeneity clustering algorithm for one-dimensional data
+    described in W. D. Fisher (1958) <doi:10.1080/01621459.1958.10501479>
+    via dynamic programming.
+License: GPL-3
+URL: https://nanx.me/oneclust/, https://github.com/nanxstats/oneclust
+Encoding: UTF-8
+LazyData: true
+VignetteBuilder: knitr
+BugReports: https://github.com/nanxstats/oneclust/issues
+LinkingTo: 
+    Rcpp
+Imports: 
+    Rcpp,
+    magrittr
+Suggests:
+    genlasso,
+    knitr,
+    rmarkdown
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
