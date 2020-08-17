@@ -6,21 +6,22 @@
 using namespace Rcpp;
 
 // clust
-List clust(NumericVector x, int k, NumericVector w);
-RcppExport SEXP _oneclust_clust(SEXP xSEXP, SEXP kSEXP, SEXP wSEXP) {
+List clust(NumericVector x, int k, NumericVector w, bool sort);
+RcppExport SEXP _oneclust_clust(SEXP xSEXP, SEXP kSEXP, SEXP wSEXP, SEXP sortSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
     Rcpp::traits::input_parameter< int >::type k(kSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type w(wSEXP);
-    rcpp_result_gen = Rcpp::wrap(clust(x, k, w));
+    Rcpp::traits::input_parameter< bool >::type sort(sortSEXP);
+    rcpp_result_gen = Rcpp::wrap(clust(x, k, w, sort));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_oneclust_clust", (DL_FUNC) &_oneclust_clust, 3},
+    {"_oneclust_clust", (DL_FUNC) &_oneclust_clust, 4},
     {NULL, NULL, 0}
 };
 

@@ -4,7 +4,7 @@
 \alias{oneclust}
 \title{Maximum homogeneity clustering for one-dimensional data}
 \usage{
-oneclust(x, k, w = NULL)
+oneclust(x, k, w = NULL, sort = TRUE)
 }
 \arguments{
 \item{x}{numeric vector, samples to be clustered}
@@ -12,6 +12,9 @@ oneclust(x, k, w = NULL)
 \item{k}{integer, number of clusters}
 
 \item{w}{numeric vector, sample weights (optional)}
+
+\item{sort}{should we sort \code{x} (and \code{w}) before clustering?
+Default is \code{TRUE}. Otherwise the order of the data is respected.}
 }
 \value{
 a list containing:

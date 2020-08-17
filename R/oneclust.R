@@ -3,6 +3,8 @@
 #' @param x numeric vector, samples to be clustered
 #' @param k integer, number of clusters
 #' @param w numeric vector, sample weights (optional)
+#' @param sort should we sort `x` (and `w`) before clustering?
+#' Default is `TRUE`. Otherwise the order of the data is respected.
 #'
 #' @return a list containing:
 #' - `cluster` - cluster id of each sample
@@ -22,14 +24,14 @@
 #'   rnorm(100, mean = -1, sd = 0.25)
 #' ))
 #' oneclust(x, 3)
-oneclust <- function(x, k, w = NULL) {
+oneclust <- function(x, k, w = NULL, sort = TRUE) {
   if (k < 2L) stop("k must be an integer larger than 2")
   if (!is.null(w)) {
     if (length(w) != length(x)) stop("x and w must have identical length")
   } else {
     w <- rep(1.0, length(x))
   }
-  cl <- clust(x, k, w)
+  cl <- clust(x, k, w, sort)
   list(
     "cluster" = cl$cluster_id,
     "cut" = cl$opt_cut

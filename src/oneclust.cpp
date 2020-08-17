@@ -3,13 +3,27 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-List clust(NumericVector x, int k, NumericVector w)
+List clust(NumericVector x, int k, NumericVector w, bool sort)
 {
-  NumericVector x_sort = clone(x).sort();
-  IntegerVector x_rank = rank_c(x, x_sort);
-  NumericVector w_sort = w[order_c(x, x_sort)];
+  NumericVector x_sort;
+  IntegerVector x_rank;
+  NumericVector w_sort;
 
   int n = x.length();
+
+  if (sort)
+  {
+    x_sort = clone(x).sort();
+    x_rank = rank_c(x, x_sort);
+    w_sort = w[order_c(x, x_sort)];
+  }
+  else
+  {
+    x_sort = clone(x);
+    x_rank = seq(0L, n - 1L);
+    w_sort = clone(w);
+  }
+
   NumericMatrix p(n, k);
   NumericMatrix e(n, k);
   NumericVector e_tmp(n);
