@@ -248,9 +248,9 @@ abline(h = 0)
 legend("topleft", legend = paste("Cluster", unique(cl3)), col = cud(unique(cl3)), pch = 1)
 ```
 
-# Time series peak calling
+# Sequential data peak calling and segmentation
 
-For sequential data, the algorithm might be useful for peak calling and segmentation.
+For sequential data such as time series data, the algorithm might be useful for peak calling and segmentation.
 
 ## Simulated time series data
 
