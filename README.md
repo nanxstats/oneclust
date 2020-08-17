@@ -5,7 +5,7 @@
 
 Implements the maximum homogeneity clustering algorithm for one-dimensional data described in W. D. Fisher (1958) <[doi:10.1080/01621459.1958.10501479](https://www.tandfonline.com/doi/abs/10.1080/01621459.1958.10501479)> via dynamic programming.
 
-Check `vignette("oneclust")` ([link](https://nanx.me/oneclust/articles/oneclust.html)) for its applications in feature engineering, regression modeling, and peak calling.
+Check the [vignette](https://nanx.me/oneclust/articles/oneclust.html) for its applications in feature engineering, regression modeling, and peak calling.
 
 ## Install
 
