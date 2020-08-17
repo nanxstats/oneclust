@@ -270,7 +270,7 @@ for (i in seq(along = pos)) {
 plot(psignal, type = "l")
 ```
 
-## Clustering (k = 2)
+## Peak calling (k = 2)
 
 Group the signal into two clusters:
 
@@ -283,7 +283,7 @@ legend("topright", legend = paste("Cluster", unique(cl$cluster)), col = cud(uniq
 Cluster 2 covers the peak locations --- the method did not specify a single
 data point as the peak, instead, it finds intervals.
 
-## Clustering (k = 4)
+## Peak calling (k = 4)
 
 If we increase $k$, there will be fewer intervals included in the peak cluster
 (Cluster 4), with narrower peak intervals:
@@ -294,28 +294,17 @@ plot(psignal, type = "h", col = cud(cl$cluster + 2))
 legend("topright", legend = paste("Cluster", unique(cl$cluster)), col = cud(unique(cl$cluster + 2)), lty = 1)
 ```
 
-## Clustering (k = 4)
+One may also use the parameter `w` in `oneclust()` to use the weighted
+version of the algorithm and amplify the signal.
 
-If we increase $k$, there will be fewer intervals included in the peak cluster
-(Cluster 4), with narrower peak intervals:
+## Segmentation (k = 6)
 
-```{r}
-cl <- oneclust(psignal, k = 4)
-plot(psignal, type = "h", col = cud(cl$cluster + 2))
-legend("topright", legend = paste("Cluster", unique(cl$cluster)), col = cud(unique(cl$cluster + 2)), lty = 1)
-```
-
-## Clustering while preserving data order (k = 6)
-
-To find a segmentation of the data, we should respect the order of the data:
+For segmentation, we should respect the order of the data:
 
 ```{r}
 cl <- oneclust(psignal, k = 6, sort = FALSE)
 plot(psignal, type = "h", col = cud(cl$cluster))
 legend("topright", legend = paste("Cluster", unique(cl$cluster)), col = cud(unique(cl$cluster)), lty = 1, cex = 0.8)
 ```
-
-One may also use the parameter `w` in `oneclust()` to use the weighted
-version of the algorithm and amplify the signal.
 
 # References
