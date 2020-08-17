@@ -33,9 +33,9 @@ remotes::install_github("nanxstats/oneclust")
 
 ![](https://i.imgur.com/WF3brnU.png)
 
-### Time series peak calling
+### Sequential data peak calling and segmentation
 
-![](https://i.imgur.com/N15aQmU.png)
+![](https://i.imgur.com/dooQh0m.png)
 
 ## License
 
