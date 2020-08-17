@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">oneclust</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -93,7 +93,7 @@
 <p><span class="math display">\[
 D = \sum_{i = 1}^{n} w_i (a_i - \bar{a_i})^2
 \]</span></p>
-<p>when each <span class="math inline">\(a_i\)</span> is assigned into <span class="math inline">\(k\)</span> clusters. <span class="math inline">\(\bar{a_i}\)</span> is the weighted mean of the cluster that <span class="math inline">\(a_i\)</span> belongs to. Fisher proved that the optimal partitions have to be <em>contiguous</em> when the data can be sorted. Contiguous means for <span class="math inline">\(i &lt; j &lt; k\)</span>, if <span class="math inline">\(a_i\)</span> and <span class="math inline">\(a_k\)</span> are assigned to the same cluster, then <span class="math inline">\(a_j\)</span> must also be assigned to the same cluster — otherwise the partition would be suboptimal. This fact leads to a substantially reduced number of possible partitions and dynamic programming solutions.</p>
+<p>when each <span class="math inline">\(a_i\)</span> is assigned into <span class="math inline">\(k\)</span> clusters. <span class="math inline">\(\bar{a_i}\)</span> is the weighted mean of the cluster that <span class="math inline">\(a_i\)</span> belongs to. Fisher proved that the optimal partitions have to be <em>contiguous</em>. Contiguous means for <span class="math inline">\(i &lt; j &lt; k\)</span>, if <span class="math inline">\(a_i\)</span> and <span class="math inline">\(a_k\)</span> are assigned to the same cluster, then <span class="math inline">\(a_j\)</span> must also be assigned to the same cluster — otherwise the partition would be suboptimal. This fact leads to a substantially reduced number of possible partitions and dynamic programming solutions.</p>
 <p>Intuitively, maximum homogeneity clustering can be used to smooth the data and reveal its structures. It has some potential applications in data pre-processing and post-processing in statistical machine learning.</p>
 </div>
 <div id="feature-engineering-for-high-cardinality-categorical-features" class="section level1">
@@ -231,16 +231,26 @@ D = \sum_{i = 1}^{n} w_i (a_i - \bar{a_i})^2
 <span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span>(<span class="st">"topleft"</span>, <span class="kw">legend</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Cluster"</span>, <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">cl2</span>)), <span class="kw">col</span> <span class="kw">=</span> <span class="fu"><a href="../reference/cud.html">cud</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">cl2</span>)), <span class="kw">pch</span> <span class="kw">=</span> <span class="fl">1</span>)</pre></body></html></div>
 <p><img src="oneclust_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
 </div>
+<div id="clustering-while-preserving-data-order-k-5" class="section level2">
+<h2 class="hasAnchor">
+<a href="#clustering-while-preserving-data-order-k-5" class="anchor"></a>Clustering while preserving data order (k = 5)</h2>
+<p>We sorted the data before clustering in all previous examples. Since the data has a strong spatial correlation, we may need to preserve the order of the data points when clustering them. This was called the “restricted problem” in <span class="citation">Fisher (1958)</span>. To solve such problems, use <code>sort = FALSE</code>:</p>
+<div class="sourceCode" id="cb27"><html><body><pre class="r"><span class="no">cl3</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/oneclust.html">oneclust</a></span>(<span class="no">beta1</span>, <span class="kw">k</span> <span class="kw">=</span> <span class="fl">5</span>, <span class="kw">sort</span> <span class="kw">=</span> <span class="fl">FALSE</span>)$<span class="no">cluster</span>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">beta1</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="fu"><a href="../reference/cud.html">cud</a></span>(<span class="no">cl3</span>))
+<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(<span class="kw">h</span> <span class="kw">=</span> <span class="fl">0</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span>(<span class="st">"topleft"</span>, <span class="kw">legend</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Cluster"</span>, <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">cl3</span>)), <span class="kw">col</span> <span class="kw">=</span> <span class="fu"><a href="../reference/cud.html">cud</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">cl3</span>)), <span class="kw">pch</span> <span class="kw">=</span> <span class="fl">1</span>)</pre></body></html></div>
+<p><img src="oneclust_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
 </div>
-<div id="time-series-peak-calling" class="section level1">
+</div>
+<div id="sequential-data-peak-calling-and-segmentation" class="section level1">
 <h1 class="hasAnchor">
-<a href="#time-series-peak-calling" class="anchor"></a>Time series peak calling</h1>
-<p>For time series data, the algorithm might be useful for calling peaks.</p>
+<a href="#sequential-data-peak-calling-and-segmentation" class="anchor"></a>Sequential data peak calling and segmentation</h1>
+<p>For sequential data such as time series data, the algorithm might be useful for peak calling and segmentation.</p>
 <div id="simulated-time-series-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#simulated-time-series-data" class="anchor"></a>Simulated time series data</h2>
 <p>We use an example from <code><a href="https://rdrr.io/pkg/pracma/man/findpeaks.html">pracma::findpeaks()</a></code>:</p>
-<div class="sourceCode" id="cb27"><html><body><pre class="r"><span class="no">x</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>, <span class="fl">1</span>, <span class="kw">len</span> <span class="kw">=</span> <span class="fl">1024</span>)
+<div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="no">x</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>, <span class="fl">1</span>, <span class="kw">len</span> <span class="kw">=</span> <span class="fl">1024</span>)
 <span class="no">pos</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.1</span>, <span class="fl">0.13</span>, <span class="fl">0.15</span>, <span class="fl">0.23</span>, <span class="fl">0.25</span>, <span class="fl">0.40</span>, <span class="fl">0.44</span>, <span class="fl">0.65</span>, <span class="fl">0.76</span>, <span class="fl">0.78</span>, <span class="fl">0.81</span>)
 <span class="no">hgt</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">4.2</span>, <span class="fl">2.1</span>, <span class="fl">4.3</span>, <span class="fl">3.1</span>, <span class="fl">5.1</span>, <span class="fl">4.2</span>)
 <span class="no">wdt</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.005</span>, <span class="fl">0.005</span>, <span class="fl">0.006</span>, <span class="fl">0.01</span>, <span class="fl">0.01</span>, <span class="fl">0.03</span>, <span class="fl">0.01</span>, <span class="fl">0.01</span>, <span class="fl">0.005</span>, <span class="fl">0.008</span>, <span class="fl">0.005</span>)
@@ -251,26 +261,44 @@ D = \sum_{i = 1}^{n} w_i (a_i - \bar{a_i})^2
 }
 
 <span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">psignal</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"l"</span>)</pre></body></html></div>
-<p><img src="oneclust_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
+<p><img src="oneclust_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 </div>
 <div id="clustering-k-2-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#clustering-k-2-1" class="anchor"></a>Clustering (k = 2)</h2>
 <p>Group the signal into two clusters:</p>
-<div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="no">cl</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/oneclust.html">oneclust</a></span>(<span class="no">psignal</span>, <span class="kw">k</span> <span class="kw">=</span> <span class="fl">2</span>)
+<div class="sourceCode" id="cb29"><html><body><pre class="r"><span class="no">cl</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/oneclust.html">oneclust</a></span>(<span class="no">psignal</span>, <span class="kw">k</span> <span class="kw">=</span> <span class="fl">2</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">psignal</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"h"</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="fu"><a href="../reference/cud.html">cud</a></span>(<span class="no">cl</span>$<span class="no">cluster</span>))
 <span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span>(<span class="st">"topright"</span>, <span class="kw">legend</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Cluster"</span>, <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">cl</span>$<span class="no">cluster</span>)), <span class="kw">col</span> <span class="kw">=</span> <span class="fu"><a href="../reference/cud.html">cud</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">cl</span>$<span class="no">cluster</span>)), <span class="kw">lty</span> <span class="kw">=</span> <span class="fl">1</span>)</pre></body></html></div>
-<p><img src="oneclust_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
+<p><img src="oneclust_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
 <p>Cluster 2 covers the peak locations — the method did not specify a single data point as the peak, instead, it finds intervals.</p>
 </div>
 <div id="clustering-k-4" class="section level2">
 <h2 class="hasAnchor">
 <a href="#clustering-k-4" class="anchor"></a>Clustering (k = 4)</h2>
 <p>If we increase <span class="math inline">\(k\)</span>, there will be fewer intervals included in the peak cluster (Cluster 4), with narrower peak intervals:</p>
-<div class="sourceCode" id="cb29"><html><body><pre class="r"><span class="no">cl</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/oneclust.html">oneclust</a></span>(<span class="no">psignal</span>, <span class="kw">k</span> <span class="kw">=</span> <span class="fl">4</span>)
+<div class="sourceCode" id="cb30"><html><body><pre class="r"><span class="no">cl</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/oneclust.html">oneclust</a></span>(<span class="no">psignal</span>, <span class="kw">k</span> <span class="kw">=</span> <span class="fl">4</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">psignal</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"h"</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="fu"><a href="../reference/cud.html">cud</a></span>(<span class="no">cl</span>$<span class="no">cluster</span> + <span class="fl">2</span>))
 <span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span>(<span class="st">"topright"</span>, <span class="kw">legend</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Cluster"</span>, <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">cl</span>$<span class="no">cluster</span>)), <span class="kw">col</span> <span class="kw">=</span> <span class="fu"><a href="../reference/cud.html">cud</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">cl</span>$<span class="no">cluster</span> + <span class="fl">2</span>)), <span class="kw">lty</span> <span class="kw">=</span> <span class="fl">1</span>)</pre></body></html></div>
-<p><img src="oneclust_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
+<p><img src="oneclust_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
+</div>
+<div id="clustering-k-4-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#clustering-k-4-1" class="anchor"></a>Clustering (k = 4)</h2>
+<p>If we increase <span class="math inline">\(k\)</span>, there will be fewer intervals included in the peak cluster (Cluster 4), with narrower peak intervals:</p>
+<div class="sourceCode" id="cb31"><html><body><pre class="r"><span class="no">cl</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/oneclust.html">oneclust</a></span>(<span class="no">psignal</span>, <span class="kw">k</span> <span class="kw">=</span> <span class="fl">4</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">psignal</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"h"</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="fu"><a href="../reference/cud.html">cud</a></span>(<span class="no">cl</span>$<span class="no">cluster</span> + <span class="fl">2</span>))
+<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span>(<span class="st">"topright"</span>, <span class="kw">legend</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Cluster"</span>, <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">cl</span>$<span class="no">cluster</span>)), <span class="kw">col</span> <span class="kw">=</span> <span class="fu"><a href="../reference/cud.html">cud</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">cl</span>$<span class="no">cluster</span> + <span class="fl">2</span>)), <span class="kw">lty</span> <span class="kw">=</span> <span class="fl">1</span>)</pre></body></html></div>
+<p><img src="oneclust_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
+</div>
+<div id="clustering-while-preserving-data-order-k-6" class="section level2">
+<h2 class="hasAnchor">
+<a href="#clustering-while-preserving-data-order-k-6" class="anchor"></a>Clustering while preserving data order (k = 6)</h2>
+<p>To find a segmentation of the data, we should respect the order of the data:</p>
+<div class="sourceCode" id="cb32"><html><body><pre class="r"><span class="no">cl</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/oneclust.html">oneclust</a></span>(<span class="no">psignal</span>, <span class="kw">k</span> <span class="kw">=</span> <span class="fl">6</span>, <span class="kw">sort</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">psignal</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"h"</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="fu"><a href="../reference/cud.html">cud</a></span>(<span class="no">cl</span>$<span class="no">cluster</span>))
+<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span>(<span class="st">"topright"</span>, <span class="kw">legend</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Cluster"</span>, <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">cl</span>$<span class="no">cluster</span>)), <span class="kw">col</span> <span class="kw">=</span> <span class="fu"><a href="../reference/cud.html">cud</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">cl</span>$<span class="no">cluster</span>)), <span class="kw">lty</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">cex</span> <span class="kw">=</span> <span class="fl">0.8</span>)</pre></body></html></div>
+<p><img src="oneclust_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
 <p>One may also use the parameter <code>w</code> in <code><a href="../reference/oneclust.html">oneclust()</a></code> to use the weighted version of the algorithm and amplify the signal.</p>
 </div>
 </div>
