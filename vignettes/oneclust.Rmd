@@ -118,10 +118,11 @@ The postal codes belong to the first five clusters have a higher probability
 probability (around 0.1) of getting label 1:
 
 ```{r}
-par(las = 1)
+op <- par(las = 1)
 plot(feature_tr, train$label, lty = 0, xlab = "Cluster", ylab = "Label")
 abline(h = 0.2, col = cud(1))
 abline(h = 0.1, col = cud(2))
+par(op)
 ```
 
 We can also verify that the number of the samples in the first five clusters
@@ -150,10 +151,11 @@ feature_te <- level_new[match(test$postcode, names(level_hist))] %>%
 Check if the recoded variable has the similar label pattern:
 
 ```{r}
-par(las = 1)
+op <- par(las = 1)
 plot(feature_te, test$label, lty = 0, xlab = "Cluster", ylab = "Label")
 abline(h = 0.2, col = cud(1))
 abline(h = 0.1, col = cud(2))
+par(op)
 ```
 
 ```{r}

@@ -1,3 +1,9 @@
+# oneclust 0.2.1
+
+## Improvements
+
+- Reset graphical parameters after changing them in the vignette.
+
 # oneclust 0.2.0
 
 ## New Features
