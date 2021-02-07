@@ -1,7 +1,6 @@
 ---
 title: "Maximum Homogeneity Clustering for One-Dimensional Data"
 author: "Nan Xiao <<https://nanx.me>>"
-date: "`r Sys.Date()`"
 bibliography: oneclust.bib
 output:
   rmarkdown::html_document:
