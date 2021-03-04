@@ -1,7 +1,10 @@
 # oneclust  <a href="https://nanx.me/oneclust/"><img src="man/figures/logo.png" align="right" height="180" /></a>
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/nanxstats/oneclust/workflows/R-CMD-check/badge.svg)](https://github.com/nanxstats/oneclust/actions)
 [![CRAN Version](https://www.r-pkg.org/badges/version/oneclust)](https://cran.r-project.org/package=oneclust)
 [![Downloads from the RStudio CRAN mirror](https://cranlogs.r-pkg.org/badges/oneclust)](https://cran.r-project.org/package=oneclust)
+<!-- badges: end -->
 
 Implements the maximum homogeneity clustering algorithm for one-dimensional data described in W. D. Fisher (1958) <[doi:10.1080/01621459.1958.10501479](https://www.tandfonline.com/doi/abs/10.1080/01621459.1958.10501479)> via dynamic programming.
 
