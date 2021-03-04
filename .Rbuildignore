@@ -3,5 +3,3 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
-^\.travis\.yml$
-^appveyor\.yml$

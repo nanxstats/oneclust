@@ -1,7 +1,5 @@
 # oneclust  <a href="https://nanx.me/oneclust/"><img src="man/figures/logo.png" align="right" height="180" /></a>
 
-[![Travis build status](https://travis-ci.org/nanxstats/oneclust.svg?branch=master)](https://travis-ci.org/nanxstats/oneclust)
-[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/nanxstats/oneclust?branch=master&svg=true)](https://ci.appveyor.com/project/nanxstats/oneclust)
 [![CRAN Version](https://www.r-pkg.org/badges/version/oneclust)](https://cran.r-project.org/package=oneclust)
 [![Downloads from the RStudio CRAN mirror](https://cranlogs.r-pkg.org/badges/oneclust)](https://cran.r-project.org/package=oneclust)
 
