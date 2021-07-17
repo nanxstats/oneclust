@@ -78,7 +78,7 @@
 
       
 
-      </header><script src="oneclust_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
+      </header><script src="oneclust_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Maximum Homogeneity Clustering for One-Dimensional Data</h1>
@@ -208,7 +208,7 @@ D = \sum_{i = 1}^{n} w_i (a_i - \bar{a_i})^2
 <div id="simulated-regression-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#simulated-regression-data" class="anchor"></a>Simulated regression data</h2>
-<p>We use an fused lasso regression model on simulated data to illustrate the potential application in post-processing the coefficients. The example is derived from the vignette in the <code>genlasso</code> package <span class="citation">(Tibshirani, Taylor, and others 2011)</span>.</p>
+<p>We use an fused lasso regression model on simulated data to illustrate the potential application in post-processing the coefficients. The example is derived from the vignette in the <code>genlasso</code> package <span class="citation">(Tibshirani, Taylor, et al. 2011)</span>.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>
 <span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">100</span>
@@ -279,7 +279,7 @@ D = \sum_{i = 1}^{n} w_i (a_i - \bar{a_i})^2
 <div id="simulated-time-series-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#simulated-time-series-data" class="anchor"></a>Simulated time series data</h2>
-<p>We use an example from <code>pracma::findpeaks()</code>:</p>
+<p>We use an example from <code><a href="https://rdrr.io/pkg/pracma/man/findpeaks.html">pracma::findpeaks()</a></code>:</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, len <span class="op">=</span> <span class="fl">1024</span><span class="op">)</span>
 <span class="va">pos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.13</span>, <span class="fl">0.15</span>, <span class="fl">0.23</span>, <span class="fl">0.25</span>, <span class="fl">0.40</span>, <span class="fl">0.44</span>, <span class="fl">0.65</span>, <span class="fl">0.76</span>, <span class="fl">0.78</span>, <span class="fl">0.81</span><span class="op">)</span>
@@ -347,7 +347,7 @@ Ke, Zheng Tracy, Jianqing Fan, and Yichao Wu. 2015. <span>“Homogeneity Pursuit
 Lin, You-Wu, Nan Xiao, Li-Li Wang, Chuan-Quan Li, and Qing-Song Xu. 2017. <span>“Ordered Homogeneity Pursuit Lasso for Group Variable Selection with Applications to Spectroscopic Data.”</span> <em>Chemometrics and Intelligent Laboratory Systems</em> 168: 62–71.
 </div>
 <div id="ref-tibshirani2011solution" class="csl-entry">
-Tibshirani, Ryan J, Jonathan Taylor, and others. 2011. <span>“The Solution Path of the Generalized Lasso.”</span> <em>The Annals of Statistics</em> 39 (3): 1335–71.
+Tibshirani, Ryan J, Jonathan Taylor, et al. 2011. <span>“The Solution Path of the Generalized Lasso.”</span> <em>The Annals of Statistics</em> 39 (3): 1335–71.
 </div>
 <div id="ref-zumel2016vtreat" class="csl-entry">
 Zumel, Nina, and John Mount. 2016. <span>“<span class="nocase">vtreat</span>: A <span class="nocase">data.frame</span> Processor for Predictive Modeling.”</span> <em>arXiv Preprint arXiv:1611.09477</em>.
