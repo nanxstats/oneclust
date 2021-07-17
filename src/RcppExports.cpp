@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // clust
 List clust(NumericVector x, int k, NumericVector w, bool sort);
 RcppExport SEXP _oneclust_clust(SEXP xSEXP, SEXP kSEXP, SEXP wSEXP, SEXP sortSEXP) {
