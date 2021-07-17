@@ -1,26 +1,36 @@
-# oneclust  <a href="https://nanx.me/oneclust/"><img src="man/figures/logo.png" align="right" height="180" /></a>
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# oneclust <a href="https://nanx.me/oneclust/"><img src="man/figures/logo.png" align="right" height="180" /></a>
 
 <!-- badges: start -->
+
 [![R-CMD-check](https://github.com/nanxstats/oneclust/workflows/R-CMD-check/badge.svg)](https://github.com/nanxstats/oneclust/actions)
-[![CRAN Version](https://www.r-pkg.org/badges/version/oneclust)](https://cran.r-project.org/package=oneclust)
-[![Downloads from the RStudio CRAN mirror](https://cranlogs.r-pkg.org/badges/oneclust)](https://cran.r-project.org/package=oneclust)
+[![CRAN
+Version](https://www.r-pkg.org/badges/version/oneclust)](https://cran.r-project.org/package=oneclust)
+[![Downloads from the RStudio CRAN
+mirror](https://cranlogs.r-pkg.org/badges/oneclust)](https://cran.r-project.org/package=oneclust)
 <!-- badges: end -->
 
-Implements the maximum homogeneity clustering algorithm for one-dimensional data described in W. D. Fisher (1958) <[doi:10.1080/01621459.1958.10501479](https://www.tandfonline.com/doi/abs/10.1080/01621459.1958.10501479)> via dynamic programming.
+Implements the maximum homogeneity clustering algorithm for
+one-dimensional data described in W. D. Fisher (1958)
+\<[doi:10.1080/01621459.1958.10501479](https://www.tandfonline.com/doi/abs/10.1080/01621459.1958.10501479)\>
+via dynamic programming.
 
-Check the [vignette](https://nanx.me/oneclust/articles/oneclust.html) for its applications in feature engineering, regression modeling, and peak calling.
+Check `vignette("oneclust")` for its applications in feature
+engineering, regression modeling, and peak calling.
 
-## Install
+## Installation
 
-From CRAN:
+You can install oneclust from CRAN:
 
-```r
+``` r
 install.packages("oneclust")
 ```
 
-From GitHub:
+Or try the development version from GitHub:
 
-```r
+``` r
 remotes::install_github("nanxstats/oneclust")
 ```
 
@@ -28,15 +38,15 @@ remotes::install_github("nanxstats/oneclust")
 
 ### Feature engineering for high-cardinality categorical features
 
-![](https://i.imgur.com/OTu0UcN.png)
+<img src="man/figures/README-high-cardinality-1.png" width="100%" />
 
 ### Grouping coefficients in regression models
 
-![](https://i.imgur.com/WF3brnU.png)
+<img src="man/figures/README-coefficients-1.png" width="100%" />
 
 ### Sequential data peak calling and segmentation
 
-![](https://i.imgur.com/dooQh0m.png)
+<img src="man/figures/README-peak-calling-1.png" width="100%" />
 
 ## License
 

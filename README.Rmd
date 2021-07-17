@@ -1,0 +1,149 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::knit_hooks$set(optipng = knitr::hook_optipng)
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%",
+  echo = FALSE,
+  message = FALSE,
+  optipng = "-o1"
+)
+```
+
+# oneclust <a href="https://nanx.me/oneclust/"><img src="man/figures/logo.png" align="right" height="180" /></a>
+
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/nanxstats/oneclust/workflows/R-CMD-check/badge.svg)](https://github.com/nanxstats/oneclust/actions)
+[![CRAN Version](https://www.r-pkg.org/badges/version/oneclust)](https://cran.r-project.org/package=oneclust)
+[![Downloads from the RStudio CRAN mirror](https://cranlogs.r-pkg.org/badges/oneclust)](https://cran.r-project.org/package=oneclust)
+<!-- badges: end -->
+
+Implements the maximum homogeneity clustering algorithm for one-dimensional data described in W. D. Fisher (1958) <[doi:10.1080/01621459.1958.10501479](https://www.tandfonline.com/doi/abs/10.1080/01621459.1958.10501479)> via dynamic programming.
+
+Check `vignette("oneclust")` for its applications in feature engineering, regression modeling, and peak calling.
+
+## Installation
+
+You can install oneclust from CRAN:
+
+```r
+install.packages("oneclust")
+```
+
+Or try the development version from GitHub:
+
+```r
+remotes::install_github("nanxstats/oneclust")
+```
+
+## Gallery
+
+```{r}
+library("oneclust")
+```
+
+### Feature engineering for high-cardinality categorical features
+
+```{r, high-cardinality, fig.width=10, fig.height=5, dpi=227}
+df_levels <- sim_postcode_levels(nlevels = 500, seed = 42)
+train <- sim_postcode_samples(df_levels, n = 100000, threshold = 3000, prob = c(0.2, 0.1), seed = 43)
+test <- sim_postcode_samples(df_levels, n = 100000, threshold = 3000, prob = c(0.2, 0.1), seed = 44)
+
+k <- 32
+level_hist <- table(train$postcode)
+level_new <- oneclust(level_hist, k)$cluster
+feature_tr <- level_new[match(train$postcode, names(level_hist))] %>%
+  as.character() %>%
+  ordered(levels = as.character(1:k))
+
+feature_te <- level_new[match(test$postcode, names(level_hist))] %>%
+  as.character() %>%
+  ordered(levels = as.character(1:k))
+
+par(mfrow = c(1, 2))
+
+par(las = 1)
+plot(feature_tr, train$label, lty = 0, xlab = "Cluster", ylab = "Label", main = "Recoded Training Set")
+abline(h = 0.2, col = cud(1))
+abline(h = 0.1, col = cud(2))
+
+par(las = 1)
+plot(feature_te, test$label, lty = 0, xlab = "Cluster", ylab = "Label", main = "Recoded Test Set")
+abline(h = 0.2, col = cud(1))
+abline(h = 0.1, col = cud(2))
+```
+
+### Grouping coefficients in regression models
+
+```{r, coefficients, fig.width=8, fig.height=8, dpi=227}
+par(mfrow = c(2, 2))
+
+set.seed(42)
+n <- 100
+i <- 1:n
+y <- (i > 20 & i < 30) + 5 * (i > 50 & i < 70) + rnorm(n, sd = 0.1)
+
+out <- genlasso::fusedlasso1d(y)
+
+beta1 <- coef(out, lambda = 1.5)$beta
+plot(beta1, main = "Raw Estimates")
+abline(h = 0)
+
+beta2 <- genlasso::softthresh(out, lambda = 1.5, gamma = 1)
+grp <- as.integer(beta2 != 0) + 1L
+plot(beta2, col = cud(grp), main = "Soft-Thresholding")
+abline(h = 0)
+legend("topleft", legend = c("Zero", "Non-zero"), col = cud(unique(grp)), pch = 1)
+
+cl1 <- oneclust(beta1, k = 2)$cluster
+plot(beta1, col = cud(cl1), main = "Maximum Homogeneity Clustering (k = 2)")
+abline(h = 0)
+legend("topleft", legend = paste("Cluster", unique(cl1)), col = cud(unique(cl1)), pch = 1)
+
+cl2 <- oneclust(beta1, k = 3)$cluster
+plot(beta1, col = cud(cl2), main = "Maximum Homogeneity Clustering (k = 3)")
+abline(h = 0)
+legend("topleft", legend = paste("Cluster", unique(cl2)), col = cud(unique(cl2)), pch = 1)
+```
+
+### Sequential data peak calling and segmentation
+
+```{r, peak-calling, fig.width=7.5, fig.height=10, dpi=227}
+x <- seq(0, 1, len = 1024)
+pos <- c(0.1, 0.13, 0.15, 0.23, 0.25, 0.40, 0.44, 0.65, 0.76, 0.78, 0.81)
+hgt <- c(4, 5, 3, 4, 5, 4.2, 2.1, 4.3, 3.1, 5.1, 4.2)
+wdt <- c(0.005, 0.005, 0.006, 0.01, 0.01, 0.03, 0.01, 0.01, 0.005, 0.008, 0.005)
+
+psignal <- numeric(length(x))
+for (i in seq(along = pos)) {
+  psignal <- psignal + hgt[i] / (1 + abs((x - pos[i]) / wdt[i]))^4
+}
+
+par(mfrow = c(4, 1))
+
+plot(psignal, type = "l", main = "Raw Signal")
+
+cl <- oneclust(psignal, k = 2)
+plot(psignal, type = "h", col = cud(cl$cluster), main = "Peak Calling (k = 2)")
+legend("topright", legend = paste("Cluster", unique(cl$cluster)), col = cud(unique(cl$cluster)), lty = 1)
+
+cl <- oneclust(psignal, k = 4)
+plot(psignal, type = "h", col = cud(cl$cluster + 2), main = "Peak Calling (k = 4)")
+legend("topright", legend = paste("Cluster", unique(cl$cluster)), col = cud(unique(cl$cluster + 2)), lty = 1)
+
+cl <- oneclust(psignal, k = 6, sort = FALSE)
+plot(psignal, type = "h", col = cud(cl$cluster), main = "Segmentation - Preserving Data Order (k = 6)")
+legend("topright", legend = paste("Cluster", unique(cl$cluster)), col = cud(unique(cl$cluster)), lty = 1, cex = 0.8)
+```
+
+## License
+
+oneclust is free and open source software, licensed under GPL-3.
