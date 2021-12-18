@@ -6,7 +6,7 @@ output:
   rmarkdown::html_document:
     toc: true
     toc_float: false
-    number_sections: true
+    number_sections: false
     highlight: "textmate"
     css: "custom.css"
 vignette: >
@@ -14,11 +14,16 @@ vignette: >
   %\VignetteIndexEntry{Maximum Homogeneity Clustering for One-Dimensional Data}
 ---
 
-```{r, echo = FALSE}
-knitr::opts_chunk$set(fig.asp = 10/16, eval = TRUE)
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  comment = "#>",
+  collapse = TRUE,
+  fig.asp = 10/16,
+  eval = TRUE
+)
 ```
 
-# Introduction
+## Introduction
 
 The `oneclust` package implements the maximum homogeneity clustering
 (partitioning) method for univariate data described in @fisher1958grouping
@@ -42,7 +47,7 @@ Intuitively, maximum homogeneity clustering can be used to smooth the data
 and reveal its structures. It has some potential applications in data
 pre-processing and post-processing in statistical machine learning.
 
-# Feature engineering for high-cardinality categorical features
+## Feature engineering for high-cardinality categorical features
 
 Categorical features with high cardinality or rare levels pose a common
 challenge when building certain types of supervised learning models.
@@ -62,7 +67,7 @@ high-cardinality categorical features with histogram sorting and
 maximum homogeneity partitioning could be a viable feature engineering
 strategy in practice. The application is also not limited to tree models.
 
-## Simulated postal code data
+### Simulated postal code data
 
 In this section, we simulate a high-cardinality variable with a binary response.
 The key assumption here is: the probabilities of having which response correlate
@@ -98,7 +103,7 @@ head(train)
 head(test)
 ```
 
-## Recode the training set
+### Recode the training set
 
 For the training set, we cluster the postal codes into 32 clusters by
 the size of each level (histogram):
@@ -135,7 +140,7 @@ sum(table(feature_tr)[1:5])
 When the specified number of clusters $k$ is smaller, the results might not
 be as good though.
 
-## Recode the test set
+### Recode the test set
 
 In practice, we should encode the postal codes in the test set with the same
 cluster labels as we used in the training set, so that the classification models
@@ -162,7 +167,7 @@ sum(test$is_rare)
 sum(table(feature_te)[1:5])
 ```
 
-# Grouping coefficients in regression models
+## Grouping coefficients in regression models
 
 Besides sparsity and other properties, the _homogeneity_ of the estimated
 coefficients in linear regressions is an important property ---
@@ -172,7 +177,7 @@ could be attributed to the systematic similarities between variables,
 for example, financial assets that belong to the same sector, or
 sets of adjacent variables with strong spatial correlation [@lin2017ordered].
 
-## Simulated regression data
+### Simulated regression data
 
 We use an fused lasso regression model on simulated data to
 illustrate the potential application in post-processing the coefficients.
@@ -186,7 +191,7 @@ i <- 1:n
 y <- (i > 20 & i < 30) + 5 * (i > 50 & i < 70) + rnorm(n, sd = 0.1)
 ```
 
-## Raw estimates
+### Raw estimates
 
 ```{r}
 out <- genlasso::fusedlasso1d(y)
@@ -198,7 +203,7 @@ plot(beta1)
 abline(h = 0)
 ```
 
-## Soft-thresholding
+### Soft-thresholding
 
 We can use soft-thresholding to transform the raw coefficient estimates into
 zero and non-zero values:
@@ -211,7 +216,7 @@ abline(h = 0)
 legend("topleft", legend = c("Zero", "Non-zero"), col = cud(unique(grp)), pch = 1)
 ```
 
-## Clustering (k = 2)
+### Clustering (k = 2)
 
 We can also use the maximum homogeneity clustering method to group
 the coefficients into two clusters:
@@ -223,7 +228,7 @@ abline(h = 0)
 legend("topleft", legend = paste("Cluster", unique(cl1)), col = cud(unique(cl1)), pch = 1)
 ```
 
-## Clustering (k = 3)
+### Clustering (k = 3)
 
 If needed, we can increase $k$ to get more groups of coefficients:
 
@@ -234,7 +239,7 @@ abline(h = 0)
 legend("topleft", legend = paste("Cluster", unique(cl2)), col = cud(unique(cl2)), pch = 1)
 ```
 
-## Clustering while preserving data order (k = 5)
+### Clustering while preserving data order (k = 5)
 
 We sorted the data before clustering in all previous examples.
 Since the data has a strong spatial correlation, we may need to
@@ -249,11 +254,11 @@ abline(h = 0)
 legend("topleft", legend = paste("Cluster", unique(cl3)), col = cud(unique(cl3)), pch = 1)
 ```
 
-# Sequential data peak calling and segmentation
+## Sequential data peak calling and segmentation
 
 For sequential data such as time series data, the algorithm might be useful for peak calling and segmentation.
 
-## Simulated time series data
+### Simulated time series data
 
 We use an example from `pracma::findpeaks()`:
 
@@ -271,7 +276,7 @@ for (i in seq(along = pos)) {
 plot(psignal, type = "l")
 ```
 
-## Peak calling (k = 2)
+### Peak calling (k = 2)
 
 Group the signal into two clusters:
 
@@ -284,7 +289,7 @@ legend("topright", legend = paste("Cluster", unique(cl$cluster)), col = cud(uniq
 Cluster 2 covers the peak locations --- the method did not specify a single
 data point as the peak, instead, it finds intervals.
 
-## Peak calling (k = 4)
+### Peak calling (k = 4)
 
 If we increase $k$, there will be fewer intervals included in the peak cluster
 (Cluster 4), with narrower peak intervals:
@@ -298,7 +303,7 @@ legend("topright", legend = paste("Cluster", unique(cl$cluster)), col = cud(uniq
 One may also use the parameter `w` in `oneclust()` to use the weighted
 version of the algorithm and amplify the signal.
 
-## Segmentation (k = 6)
+### Segmentation (k = 6)
 
 For segmentation, we should respect the order of the data:
 
@@ -308,4 +313,4 @@ plot(psignal, type = "h", col = cud(cl$cluster))
 legend("topright", legend = paste("Cluster", unique(cl$cluster)), col = cud(unique(cl$cluster)), lty = 1, cex = 0.8)
 ```
 
-# References
+## References
