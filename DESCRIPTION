@@ -13,9 +13,11 @@ URL: https://nanx.me/oneclust/, https://github.com/nanxstats/oneclust
 Encoding: UTF-8
 VignetteBuilder: knitr
 BugReports: https://github.com/nanxstats/oneclust/issues
-LinkingTo: 
+Depends:
+    R (>= 3.5.0)
+LinkingTo:
     Rcpp
-Imports: 
+Imports:
     Rcpp,
     magrittr
 Suggests:
