@@ -1,3 +1,11 @@
+# oneclust 0.2.2
+
+## Improvements
+
+- Use dependencies (genlasso) conditionally in vignettes.
+- Fix clang14 warning on using bitwise `|` with boolean operands.
+- Remove the `LazyData` field in `DESCRIPTION` to fix the check note.
+
 # oneclust 0.2.1
 
 ## Improvements
