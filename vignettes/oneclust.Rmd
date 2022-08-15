@@ -194,21 +194,14 @@ y <- (i > 20 & i < 30) + 5 * (i > 50 & i < 70) + rnorm(n, sd = 0.1)
 ### Raw estimates
 
 ```{r}
-genlasso_available <- requireNamespace("genlasso", quietly = TRUE)
-
-out <- if (genlasso_available) {
-  genlasso::fusedlasso1d(y)
-} else {
-  readRDS("out.rds")
-}
+# # If genlasso is available:
+# out <- genlasso::fusedlasso1d(y)
+out <- readRDS("out.rds")
 ```
 
 ```{r}
-beta1 <- if (genlasso_available) {
-  coef(out, lambda = 1.5)$beta
-} else {
-  readRDS("beta1.rds")
-}
+# beta1 <- coef(out, lambda = 1.5)$beta
+beta1 <- readRDS("beta1.rds")
 plot(beta1)
 abline(h = 0)
 ```
@@ -219,11 +212,8 @@ We can use soft-thresholding to transform the raw coefficient estimates into
 zero and non-zero values:
 
 ```{r}
-beta2 <- if (genlasso_available) {
-  genlasso::softthresh(out, lambda = 1.5, gamma = 1)
-} else {
-  readRDS("beta2.rds")
-}
+# beta2 <- genlasso::softthresh(out, lambda = 1.5, gamma = 1)
+beta2 <- readRDS("beta2.rds")
 grp <- as.integer(beta2 != 0) + 1L
 plot(beta2, col = cud(grp))
 abline(h = 0)
