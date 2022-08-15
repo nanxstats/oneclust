@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/nanxstats/oneclust/workflows/R-CMD-check/badge.svg)](https://github.com/nanxstats/oneclust/actions)
+[![R-CMD-check](https://github.com/nanxstats/oneclust/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/nanxstats/oneclust/actions/workflows/R-CMD-check.yaml)
 [![CRAN
 Version](https://www.r-pkg.org/badges/version/oneclust)](https://cran.r-project.org/package=oneclust)
 [![Downloads from the RStudio CRAN
