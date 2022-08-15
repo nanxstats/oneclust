@@ -1,7 +1,7 @@
 Package: oneclust
 Type: Package
 Title: Maximum Homogeneity Clustering for Univariate Data
-Version: 0.2.1
+Version: 0.2.1.9000
 Authors@R: c(
     person("Nan", "Xiao", email = "me@nanx.me", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-0250-5673")))
