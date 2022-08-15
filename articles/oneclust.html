@@ -208,19 +208,12 @@ D = \sum_{i = 1}^{n} w_i (a_i - \bar{a_i})^2
 <h3 id="raw-estimates">Raw estimates<a class="anchor" aria-label="anchor" href="#raw-estimates"></a>
 </h3>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">genlasso_available</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"genlasso"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">out</span> <span class="op">&lt;-</span> <span class="kw">if</span> <span class="op">(</span><span class="va">genlasso_available</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu">genlasso</span><span class="fu">::</span><span class="fu">fusedlasso1d</span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span>
-<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"out.rds"</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># # If genlasso is available:</span></span>
+<span><span class="co"># out &lt;- genlasso::fusedlasso1d(y)</span></span>
+<span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"out.rds"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">beta1</span> <span class="op">&lt;-</span> <span class="kw">if</span> <span class="op">(</span><span class="va">genlasso_available</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">out</span>, lambda <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span><span class="op">$</span><span class="va">beta</span></span>
-<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"beta1.rds"</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
+<code class="sourceCode R"><span><span class="co"># beta1 &lt;- coef(out, lambda = 1.5)$beta</span></span>
+<span><span class="va">beta1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"beta1.rds"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">beta1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
 <p><img src="oneclust_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
@@ -230,11 +223,8 @@ D = \sum_{i = 1}^{n} w_i (a_i - \bar{a_i})^2
 </h3>
 <p>We can use soft-thresholding to transform the raw coefficient estimates into zero and non-zero values:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">beta2</span> <span class="op">&lt;-</span> <span class="kw">if</span> <span class="op">(</span><span class="va">genlasso_available</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu">genlasso</span><span class="fu">::</span><span class="fu">softthresh</span><span class="op">(</span><span class="va">out</span>, lambda <span class="op">=</span> <span class="fl">1.5</span>, gamma <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"beta2.rds"</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
+<code class="sourceCode R"><span><span class="co"># beta2 &lt;- genlasso::softthresh(out, lambda = 1.5, gamma = 1)</span></span>
+<span><span class="va">beta2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"beta2.rds"</span><span class="op">)</span></span>
 <span><span class="va">grp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">beta2</span> <span class="op">!=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1L</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">beta2</span>, col <span class="op">=</span> <span class="fu"><a href="../reference/cud.html">cud</a></span><span class="op">(</span><span class="va">grp</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
