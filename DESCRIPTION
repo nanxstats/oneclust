@@ -12,7 +12,6 @@ Description: Maximum homogeneity clustering algorithm for one-dimensional data
 License: GPL-3
 URL: https://nanx.me/oneclust/, https://github.com/nanxstats/oneclust
 Encoding: UTF-8
-LazyData: true
 VignetteBuilder: knitr
 BugReports: https://github.com/nanxstats/oneclust/issues
 LinkingTo: 
