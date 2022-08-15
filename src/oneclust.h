@@ -21,7 +21,7 @@ IntegerVector order_c(NumericVector x, NumericVector x_sort)
 // get a slice from a vector
 NumericVector slice(NumericVector x, int start, int end)
 {
-  bool idx_error = ((start < 0L) | (end < 0L) | (start > x.length() - 1L) | (end > x.length() - 1L));
+  bool idx_error = ((start < 0L) || (end < 0L) || (start > x.length() - 1L) || (end > x.length() - 1L));
   if (idx_error)
   {
     stop("'start' and 'end' must be in the index range of x.");
