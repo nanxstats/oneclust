@@ -11,7 +11,10 @@ oneclust(x, k, w = NULL, sort = TRUE)
 
 \item{k}{Integer, number of clusters.}
 
-\item{w}{Numeric vector, sample weights (optional).}
+\item{w}{Numeric vector, sample weights (optional).
+Note that the weights here should be sampling weights
+(for example, a certain proportion of the population),
+not frequency weights (for example, number of occurrences).}
 
 \item{sort}{Should we sort \code{x} (and \code{w}) before clustering?
 Default is \code{TRUE}. Otherwise the order of the data is respected.}

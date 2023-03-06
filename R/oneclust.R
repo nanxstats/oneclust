@@ -3,6 +3,9 @@
 #' @param x Numeric vector, samples to be clustered.
 #' @param k Integer, number of clusters.
 #' @param w Numeric vector, sample weights (optional).
+#' Note that the weights here should be sampling weights
+#' (for example, a certain proportion of the population),
+#' not frequency weights (for example, number of occurrences).
 #' @param sort Should we sort `x` (and `w`) before clustering?
 #' Default is `TRUE`. Otherwise the order of the data is respected.
 #'
