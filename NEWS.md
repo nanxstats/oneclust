@@ -1,3 +1,11 @@
+# oneclust 0.2.3
+
+## Improvements
+
+- Clarify in the documentation that the weights should be sampling weights
+  instead of frequency weights (thanks, @krzysztof-pankow, #3).
+- Improve document style following the tidyverse style guide.
+
 # oneclust 0.2.2
 
 ## Improvements
