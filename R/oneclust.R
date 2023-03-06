@@ -1,14 +1,14 @@
 #' Maximum homogeneity clustering for one-dimensional data
 #'
-#' @param x numeric vector, samples to be clustered
-#' @param k integer, number of clusters
-#' @param w numeric vector, sample weights (optional)
-#' @param sort should we sort `x` (and `w`) before clustering?
+#' @param x Numeric vector, samples to be clustered.
+#' @param k Integer, number of clusters.
+#' @param w Numeric vector, sample weights (optional).
+#' @param sort Should we sort `x` (and `w`) before clustering?
 #' Default is `TRUE`. Otherwise the order of the data is respected.
 #'
-#' @return a list containing:
-#' - `cluster` - cluster id of each sample
-#' - `cut` - index of the optimal cut points
+#' @return A list containing:
+#' - `cluster` - cluster id of each sample.
+#' - `cut` - index of the optimal cut points.
 #'
 #' @export oneclust
 #'

@@ -1,10 +1,10 @@
 #' Masataka Okabe and Kei Ito's Color Universal Design palette
 #'
-#' @param x vector, color index
-#' @param shift start from the second color in the CUD palette?
-#' @param reverse reverse the order?
+#' @param x Vector, color index.
+#' @param shift Start from the second color in the CUD palette?
+#' @param reverse Reverse the color order?
 #'
-#' @return a vector of color hex values
+#' @return A vector of color hex values.
 #'
 #' @export cud
 #'

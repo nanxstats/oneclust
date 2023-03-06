@@ -7,12 +7,12 @@
 sim_postcode_levels(nlevels = 100L, seed = 1001)
 }
 \arguments{
-\item{nlevels}{number of levels to generate}
+\item{nlevels}{Number of levels to generate.}
 
-\item{seed}{random seed}
+\item{seed}{Random seed.}
 }
 \value{
-a data frame of postal codes and sizes
+A data frame of postal codes and sizes.
 }
 \description{
 Simulate the levels and their sizes in a high-cardinality feature

@@ -7,14 +7,14 @@
 cud(x, shift = TRUE, reverse = FALSE)
 }
 \arguments{
-\item{x}{vector, color index}
+\item{x}{Vector, color index.}
 
-\item{shift}{start from the second color in the CUD palette?}
+\item{shift}{Start from the second color in the CUD palette?}
 
-\item{reverse}{reverse the order?}
+\item{reverse}{Reverse the color order?}
 }
 \value{
-a vector of color hex values
+A vector of color hex values.
 }
 \description{
 Masataka Okabe and Kei Ito's Color Universal Design palette

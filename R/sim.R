@@ -1,9 +1,9 @@
 #' Simulate the levels and their sizes in a high-cardinality feature
 #'
-#' @param nlevels number of levels to generate
-#' @param seed random seed
+#' @param nlevels Number of levels to generate.
+#' @param seed Random seed.
 #'
-#' @return a data frame of postal codes and sizes
+#' @return A data frame of postal codes and sizes.
 #'
 #' @export sim_postcode_levels
 #'
@@ -17,7 +17,7 @@
 #' head(df_levels)
 sim_postcode_levels <- function(nlevels = 100L, seed = 1001) {
   set.seed(seed)
-  # generate level names and sizes
+  # Generate level names and sizes
   size <- round(rlnorm(nlevels, meanlog = log(4000), sdlog = 1))
   postcode <- paste0("z", formatC(sample.int(nlevels * 10L, size = nlevels, replace = FALSE), width = 5, flag = "0"))
   data.frame("size" = size, "postcode" = postcode, stringsAsFactors = FALSE)
@@ -25,13 +25,13 @@ sim_postcode_levels <- function(nlevels = 100L, seed = 1001) {
 
 #' Simulate a high-cardinality feature and a binary response
 #'
-#' @param df_levels number of levels
-#' @param n number of samples
-#' @param threshold the threshold for determining if a postal code is rare
-#' @param prob occurrence probability vector of the class 1 event in rare and non-rare postal codes
-#' @param seed random seed
+#' @param df_levels Number of levels.
+#' @param n Number of samples.
+#' @param threshold The threshold for determining if a postal code is rare.
+#' @param prob Occurrence probability vector of the class 1 event in rare and non-rare postal codes.
+#' @param seed Random seed.
 #'
-#' @return a data frame of samples with postal codes, response labels, and level rarity status
+#' @return A data frame of samples with postal codes, response labels, and level rarity status.
 #'
 #' @export sim_postcode_samples
 #'
@@ -49,7 +49,7 @@ sim_postcode_levels <- function(nlevels = 100L, seed = 1001) {
 #' head(df_postcode)
 sim_postcode_samples <- function(df_levels, n = 2000L, threshold = 1000, prob = c(0.3, 0.1), seed = 1001) {
   set.seed(seed)
-  # draw samples based on the levels
+  # Draw samples based on the levels
   ords <- sort(sample.int(sum(df_levels$size), size = n, replace = TRUE))
   cs <- cumsum(df_levels$size)
   indexes <- findInterval(ords, cs) + 1

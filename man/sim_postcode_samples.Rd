@@ -13,18 +13,18 @@ sim_postcode_samples(
 )
 }
 \arguments{
-\item{df_levels}{number of levels}
+\item{df_levels}{Number of levels.}
 
-\item{n}{number of samples}
+\item{n}{Number of samples.}
 
-\item{threshold}{the threshold for determining if a postal code is rare}
+\item{threshold}{The threshold for determining if a postal code is rare.}
 
-\item{prob}{occurrence probability vector of the class 1 event in rare and non-rare postal codes}
+\item{prob}{Occurrence probability vector of the class 1 event in rare and non-rare postal codes.}
 
-\item{seed}{random seed}
+\item{seed}{Random seed.}
 }
 \value{
-a data frame of samples with postal codes, response labels, and level rarity status
+A data frame of samples with postal codes, response labels, and level rarity status.
 }
 \description{
 Simulate a high-cardinality feature and a binary response

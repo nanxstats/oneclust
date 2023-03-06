@@ -7,20 +7,20 @@
 oneclust(x, k, w = NULL, sort = TRUE)
 }
 \arguments{
-\item{x}{numeric vector, samples to be clustered}
+\item{x}{Numeric vector, samples to be clustered.}
 
-\item{k}{integer, number of clusters}
+\item{k}{Integer, number of clusters.}
 
-\item{w}{numeric vector, sample weights (optional)}
+\item{w}{Numeric vector, sample weights (optional).}
 
-\item{sort}{should we sort \code{x} (and \code{w}) before clustering?
+\item{sort}{Should we sort \code{x} (and \code{w}) before clustering?
 Default is \code{TRUE}. Otherwise the order of the data is respected.}
 }
 \value{
-a list containing:
+A list containing:
 \itemize{
-\item \code{cluster} - cluster id of each sample
-\item \code{cut} - index of the optimal cut points
+\item \code{cluster} - cluster id of each sample.
+\item \code{cut} - index of the optimal cut points.
 }
 }
 \description{
