@@ -1,9 +1,9 @@
-pandoc: 2.14.2
-pkgdown: 2.0.6
+pandoc: 2.19.2
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   oneclust: oneclust.html
-last_built: 2022-08-15T05:43Z
+last_built: 2023-03-06T23:12Z
 urls:
   reference: https://nanx.me/oneclust/reference
   article: https://nanx.me/oneclust/articles
