@@ -88,12 +88,13 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>The <code>oneclust</code> package implements the maximum homogeneity
-clustering (partitioning) method for univariate data described in <span class="citation">Fisher (1958)</span> via dynamic programming. Given a
-one-dimensional numerical vector <span class="math inline">\((a_1, a_2,
-\ldots, a_n)\)</span>, a weight vector <span class="math inline">\((w_1,
-w_2, \ldots, w_n)\)</span>, and a positive integer <span class="math inline">\(k &lt; n\)</span>, the algorithm seeks to
-minimize</p>
+<p>oneclust implements the maximum homogeneity clustering (partitioning)
+method for univariate data described in <span class="citation">Fisher
+(1958)</span> via dynamic programming. Given a one-dimensional numerical
+vector <span class="math inline">\((a_1, a_2, \ldots, a_n)\)</span>, a
+weight vector <span class="math inline">\((w_1, w_2, \ldots,
+w_n)\)</span>, and a positive integer <span class="math inline">\(k &lt;
+n\)</span>, the algorithm seeks to minimize</p>
 <p><span class="math display">\[
 D = \sum_{i = 1}^{n} w_i (a_i - \bar{a_i})^2
 \]</span></p>
@@ -141,7 +142,7 @@ generated, we use maximum homogeneity clustering on the (sorted)
 histogram of the categorical variable. Our goal is to verify if the
 clustering results can uncover this level size structure and potentially
 help the classification modeling later. This example is derived from the
-“rare levels” vignette in the <code>vtreat</code> package <span class="citation">(Zumel and Mount 2016)</span>.</p>
+“rare levels” vignette in the vtreat package <span class="citation">(Zumel and Mount 2016)</span>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://nanx.me/oneclust/">"oneclust"</a></span><span class="op">)</span></span></code></pre></div>
 <p>Generate a training set and an independent test set:</p>
@@ -192,9 +193,9 @@ the size of each level (histogram):</p>
 <code class="sourceCode R"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">32</span></span>
 <span><span class="va">level_hist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">train</span><span class="op">$</span><span class="va">postcode</span><span class="op">)</span></span>
 <span><span class="va">level_new</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/oneclust.html">oneclust</a></span><span class="op">(</span><span class="va">level_hist</span>, <span class="va">k</span><span class="op">)</span><span class="op">$</span><span class="va">cluster</span></span>
-<span><span class="va">feature_tr</span> <span class="op">&lt;-</span> <span class="va">level_new</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">train</span><span class="op">$</span><span class="va">postcode</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">level_hist</span><span class="op">)</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">ordered</a></span><span class="op">(</span>levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">k</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">feature_tr_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">k</span><span class="op">)</span></span>
+<span><span class="va">feature_tr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">level_new</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">train</span><span class="op">$</span><span class="va">postcode</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">level_hist</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">feature_tr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">ordered</a></span><span class="op">(</span><span class="va">feature_tr</span>, levels <span class="op">=</span> <span class="va">feature_tr_levels</span><span class="op">)</span></span></code></pre></div>
 <p>The postal codes belong to the first five clusters have a higher
 probability (approximately 0.2) of getting label 1. The other clusters
 have a lower probability (around 0.1) of getting label 1:</p>
@@ -224,9 +225,8 @@ good though.</p>
 the same cluster labels as we used in the training set, so that the
 classification models can be correctly applied to the test set.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">feature_te</span> <span class="op">&lt;-</span> <span class="va">level_new</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">postcode</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">level_hist</span><span class="op">)</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">ordered</a></span><span class="op">(</span>levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">k</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">feature_te</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">level_new</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">postcode</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">level_hist</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">feature_te</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">ordered</a></span><span class="op">(</span><span class="va">feature_te</span>, levels <span class="op">=</span> <span class="va">feature_tr_levels</span><span class="op">)</span></span></code></pre></div>
 <p>Check if the recoded variable has the similar label pattern:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>las <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -260,9 +260,9 @@ strong spatial correlation <span class="citation">(Lin et al.
 </h3>
 <p>We use an fused lasso regression model on simulated data to
 illustrate the potential application in post-processing the
-coefficients. The example is derived from the vignette in the
-<code>genlasso</code> package <span class="citation">(Tibshirani,
-Taylor, et al. 2011)</span>.</p>
+coefficients. The example is derived from the vignette in the genlasso
+package <span class="citation">(Tibshirani, Taylor, et al.
+2011)</span>.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
 <span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
