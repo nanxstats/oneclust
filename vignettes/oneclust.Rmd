@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-The `oneclust` package implements the maximum homogeneity clustering
+oneclust implements the maximum homogeneity clustering
 (partitioning) method for univariate data described in @fisher1958grouping
 via dynamic programming. Given a one-dimensional numerical vector
 $(a_1, a_2, \ldots, a_n)$, a weight vector $(w_1, w_2, \ldots, w_n)$,
@@ -76,7 +76,7 @@ After the data is generated, we use maximum homogeneity clustering on the
 (sorted) histogram of the categorical variable. Our goal is to verify if
 the clustering results can uncover this level size structure and potentially
 help the classification modeling later. This example is derived from
-the "rare levels" vignette in the `vtreat` package [@zumel2016vtreat].
+the "rare levels" vignette in the vtreat package [@zumel2016vtreat].
 
 ```{r, message=FALSE}
 library("oneclust")
@@ -112,9 +112,9 @@ the size of each level (histogram):
 k <- 32
 level_hist <- table(train$postcode)
 level_new <- oneclust(level_hist, k)$cluster
-feature_tr <- level_new[match(train$postcode, names(level_hist))] %>%
-  as.character() %>%
-  ordered(levels = as.character(1:k))
+feature_tr_levels <- as.character(1:k)
+feature_tr <- as.character(level_new[match(train$postcode, names(level_hist))])
+feature_tr <- ordered(feature_tr, levels = feature_tr_levels)
 ```
 
 The postal codes belong to the first five clusters have a higher probability
@@ -147,9 +147,8 @@ cluster labels as we used in the training set, so that the classification models
 can be correctly applied to the test set.
 
 ```{r}
-feature_te <- level_new[match(test$postcode, names(level_hist))] %>%
-  as.character() %>%
-  ordered(levels = as.character(1:k))
+feature_te <- as.character(level_new[match(test$postcode, names(level_hist))])
+feature_te <- ordered(feature_te, levels = feature_tr_levels)
 ```
 
 Check if the recoded variable has the similar label pattern:
@@ -182,7 +181,7 @@ sets of adjacent variables with strong spatial correlation [@lin2017ordered].
 We use an fused lasso regression model on simulated data to
 illustrate the potential application in post-processing the coefficients.
 The example is derived from the vignette in the
-`genlasso` package [@tibshirani2011solution].
+genlasso package [@tibshirani2011solution].
 
 ```{r}
 set.seed(42)
