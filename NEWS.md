@@ -1,3 +1,13 @@
+# oneclust 0.3.0
+
+## Improvements
+
+- Remove the magrittr package from `Imports`. As a result, the magrittr pipe
+  is no long re-exported by oneclust. This change makes oneclust only use the
+  minimal sufficient number of dependencies.
+- Update the code examples in the vignette to use meaningful intermediate
+  variable names instead of relying on the pipe operator.
+
 # oneclust 0.2.3
 
 ## Improvements
